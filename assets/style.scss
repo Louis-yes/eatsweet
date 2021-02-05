@@ -6,7 +6,7 @@
   outline: -webkit-focus-ring-color auto 1px;
 }
 .eatsweet {
-  --primary: #f0c013;
+  --primary: #63281B;
   --hover: #13c0f0;
   --body: #444;
 
@@ -14,12 +14,13 @@
   position: relative;
   margin: 0 auto;
 
-  font-family: Baskerville, serif;
+  font-family: "Baskerville", serif;
 
   .intro {
-    padding: 4em;
+    padding: 2em;
     font-size: 18pt;
-
+    text-align: center;
+    letter-spacing: .5px;
     .next-text {
       cursor: pointer;
       color: var(--primary);
@@ -106,10 +107,11 @@
   .active { cursor: default; }
   .bite { color: rgba(255,255,255,0); }
 
-  .download-output {
-    cursor: pointer;
+  .download-instructions {
     font-family: inherit;
-    border: none;
-    background: none;
+    .download-input, .download-output {
+      cursor: pointer;
+      color: var(--primary)
+    }
   }
 }

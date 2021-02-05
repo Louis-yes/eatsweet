@@ -20,22 +20,26 @@ var input = document.querySelector('.input');
 var output = document.querySelector('.output');
 var titleDescription = document.querySelector('.title-description');
 
-var textIndex = 0;
+var textIndex = window.texts.length;
 var symbolReg = /(^\W+)|(\W+$)/g;
-
-var pp = new WordDealer(window.texts[0].contents.trim(), ' ');
-
 
 function wordsTemplate(w,i){ return `<span tabindex="0" class="word ${w}" data-index="${i}">${w}</span>` }
 function render_input(rr){ return pp.words.map((w,i) => wordsTemplate(w,i)).join(pp.spacer) }
-function render_description(){ return `Hey we got you a hot copy of "${window.texts[textIndex].title}".`}
+function render_description(txt){ return `Here's some of <em>${txt.title}.</em>`}
 function updateSource() {
-	titleDescription.innerHTML = render_description();
+	titleDescription.innerHTML = render_description(window.currText);
 	input.innerHTML = render_input(pp.words);
 	output.innerHTML = "";
 }
-
-updateSource();
+function updateText(){
+	textIndex = textIndex < window.texts.length -1 ? textIndex + 1 : 0;
+	var newText = window.texts[textIndex].split("|");
+	var currText = window.currText = {author:newText[1], title: newText[0], contents:newText[2]}
+	pp = new WordDealer(currText.contents,' ');
+	updateSource();
+}
+var pp = {};
+updateText();
 
 function willOverflow(el, newContent) {
 	function isOverflown(element) {
@@ -88,9 +92,8 @@ function event_handler_addSpace(e) {
 }
 
 function event_handler_download(e) {
-	// window.scrollTo(0,0)
 	html2canvas(
-		output,
+		document.querySelector("."+ e.target.classList[0].split('-')[1]),
 		{
 			width:output.clientWidth,
 			height: output.clientHeight,
@@ -111,9 +114,7 @@ function event_handler_download(e) {
 }
 
 function event_handler_next(e) {
-	textIndex = textIndex < window.texts.length -1 ? textIndex + 1 : 0;
-	pp = new WordDealer(window.texts[textIndex].contents.trim(), ' ');
-	updateSource();
+	updateText();
 }
 
 var addSpace = document.querySelector('.add-space')

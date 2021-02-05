@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>book worms word toy</title>
+  <title>Ex libris, something sweet</title>
   <link rel="stylesheet" href="assets/tachyons.min.css">
   <link rel="stylesheet" href="assets/style.css"/>
   <script type="text/javascript" src="assets/promise.min.js"></script>
@@ -14,40 +14,36 @@
   <main class="main">
     <section id="eatsweet" class="app eatsweet">
       <div class="intro">
-        <span class="title-description">Hey we got you a hot copy of blah blah blah</span>
-        <br> Or would you rather <span class="next-text">something different?</span>
+        <span class="title-description">Here's some of <em>${title}</em></span>
+        <br>
+        <span class="next-text">Want something different?</span>
       </div>
       <div class="pages">
         <div class="tools-input">
           <div class="input"></div>
           <span class="add-space">
-            <span tabindex="0" class="space space-one ~"> ~ </span>        |
-            <span tabindex="0" class="space space-three ~~~"> ~~~ </span>  |
-            <span tabindex="0" class="space space-eight"> ~~~~~~~~ </span>
+            <span tabindex="0" class="space space-one ~"> ~~~ </span>        |
+            <span tabindex="0" class="space space-three ~~~"> ~~~~~~ </span>  |
+            <span tabindex="0" class="space space-eight"> ~~~~~~~~~~~~ </span>
           </span>
-          <!-- <span class="download">download</span> -->
         </div>
         <div class="tools-output">
           <div class="output"></div>
-          <!-- <span class="download">download</span> -->
         </div>
       </div>
       <div class="tools-sharing">
-        <button class="download-output">Download</button>
+        <span class="download-instructions">You can
+          <span class="download-output">download the new text</span>, or
+          <span class="download-input">what’s left of the old text</span></span>
       </div>
     </section>
   </main>
-  <!-- <script src="assets/script.js"></script> -->
   <script>
     window.texts = [
-      {
-        title: "2017 National Constitutional Convention",
-        contents: "We, gathered at the 2017 National Constitutional Convention, coming from all points of the southern sky, make this statement from the heart: Our Aboriginal and Torres Strait Islander tribes were the first sovereign Nations of the Australian continent and its adjacent islands, and possessed it under our own laws and customs. This our ancestors did, according to the reckoning of our culture, from the Creation, according to the common law from ‘time immemorial’, and according to science more than 60,000 years ago."
-      },
-      {
-        title: "horse",
-        contents: "The horse (Equus ferus caballus)[2][3] is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today. Humans began domesticating horses around 4000 BC, and their domestication is believed to have been widespread by 3000 BC. Horses in the subspecies caballus are domesticated, although some domesticated populations live in the wild as feral horses. These feral populations are not true wild horses, as this term"
-      }
+      "Slaughter House 5|Kurt Vonnegut|An idiotic Englishman, who had lost all his teeth somewhere had his souvenir in a canvas bag. The bag was resting on my insteps. He would peek into the bag every now and then, and he would roll his eyes and swivel his scrawny neck, trying to catch people looking covetously at his bag. And he would bounce the bag on my insteps. I thought this bouncing was accidental. But I was mistaken. He had to show somebody what was in the bag, and he had decided he could trust me. He caught my eye, winked, opened the bag. There was a plaster model of the Eiffel Tower in there. It was painted gold. It had a clock in it. 'There's a smashin' thing,' he said.",
+      "Pride and Prejudice|Jane Austen|It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.“My dear Mr. Bennet,” said his lady to him one day, “have you heard that Netherfield Park is let at last?”Mr. Bennet replied that he had not.“But it is,” returned she; “for Mrs. Long has just been here, and she told me all about it.”Mr. Bennet made no answer.“Do you not want to know who has taken it?” cried his wife impatiently.“You want to tell me, and I have no objection to hearing it.”This was invitation enough.",
+      "A Tale of Two Cities|Charles Dickens|It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the other way—in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only.",
+      "Wikipedia Article about Horses|Wikipedia|The horse (Equus ferus caballus)[2][3] is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today. Humans began domesticating horses around 4000 BC, and their domestication is believed to have been widespread by 3000 BC. Horses in the subspecies caballus are domesticated, although some domesticated populations live in the wild as feral horses. These feral populations are not true wild horses, as this term"
     ]
   </script>
   <script src="assets/wordtoy.js"></script>
