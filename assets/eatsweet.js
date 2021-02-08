@@ -60,7 +60,9 @@ function event_handler_input(e) {
 	  var index = tt.dataset.index;
 	  var cl = tt.classList;
 	  if(cl.contains("word") && !cl.contains("active")) {
-			var str = " " + wordsTemplate(pp.words[index].replace(symbolReg, '').toLowerCase(), index);
+			var word = pp.words[index].replace(symbolReg, '');
+			word = word.length > 1 ? word.toLowerCase() : word;
+			var str = " " + wordsTemplate(word, index);
 			if(!willOverflow(output, str)){
 				output.innerHTML += str;
 				cl.add("active");
@@ -69,6 +71,10 @@ function event_handler_input(e) {
 				pp.select(index);
 			} else {
 				console.log (pp.words[index], "wont fit")
+				output.classList.add('overflow');
+				window.setTimeout(function(){
+					output.classList.remove('overflow');
+				}, 400)
 			}
 	  }
 	}
@@ -86,31 +92,53 @@ function event_handler_addSpace(e) {
 		cc.innerHTML += e.target.innerHTML;
 	  output.appendChild(cc);
 	  window.setTimeout(function(){
-	    cc.classList.add('bite')
+	    output.querySelector('.space:not(.bite)').classList.add('bite')
 	  }, 300)
 	}
 }
 
 function event_handler_download(e) {
-	html2canvas(
-		document.querySelector("."+ e.target.classList[0].split('-')[1]),
-		{
-			width:output.clientWidth,
-			height: output.clientHeight,
-			scrollX: -window.scrollX,
-			scrollY: -window.scrollY,
-			windowWidth: document.documentElement.offsetWidth,
-			windowHeight: document.documentElement.offsetHeight
+	if(e.target.classList.contains('download')){
+		var el = e.target.dataset.downloadTarget || ".output";
+		console.log(el)
+		var type = e.target.dataset.downloadType || "composition";
+		html2canvas(
+			document.querySelector(el),
+			{
+				width:output.clientWidth,
+				height: output.clientHeight,
+				scrollX: -window.scrollX,
+				scrollY: -window.scrollY,
+				windowWidth: document.documentElement.offsetWidth,
+				windowHeight: document.documentElement.offsetHeight,
+				onclone: function (doc) {
+						var bites = doc.body.getElementsByClassName("bite");
+						Array.prototype.forEach.call(bites, function(b){ b.style.visibility = "hidden"; })
+				}
+			}
+		).then(function(canvas) {
+			var fileName = "refined_from_" + window.currText.title.split(" ").join("_");
+			var img = document.createElement('img');
+			var link = document.createElement('a');
+
+			img.src = canvas.toDataURL();
+			link.href = img.src;
+			link.download = fileName + ".png";
+			link.click();
+		});
+	}
+}
+
+function createSaveName(oo, type){
+	if (type == "input") {
+		return "reduced_"+window.currText.title.split(" ").join("_");
+	} else {
+		var svnm = []
+		for (var i = 0; i < 3; i++) {
+			if (oo.activeWords[i]) { svnm.push(oo.words[oo.activeWords[i]]) }
 		}
-	).then(function(canvas) {
-    // document.body.appendChild(canvas);
-		var img = document.createElement('img');
-		img.src = canvas.toDataURL();
-		var link = document.createElement('a');
-		link.href = img.src;
-		link.download = pp.words[pp.activeWords[0]||0]+".png";
-		link.click();
-	});
+		return svnm.length > 0 ? svnm.join("_") : "blank";
+	}
 }
 
 function event_handler_next(e) {
@@ -131,6 +159,6 @@ input.addEventListener('click', event_handler_input);
 input.addEventListener('keydown', event_handler_input);
 input.addEventListener('mouseover', function(e){ if (window.mousePressed) { event_handler_input(e) } });
 
-var download = document.querySelector('.download-output');
+var download = document.querySelector('.tools-sharing');
 if(!html2canvas) { download.parentNode.removeChild(download) }
 else { download.addEventListener('click', event_handler_download);}

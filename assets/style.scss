@@ -2,9 +2,6 @@
   background-color: transparent;
 }
 
-*:focus, *:active {
-  outline: -webkit-focus-ring-color auto 1px;
-}
 .eatsweet {
   --primary: #63281B;
   --hover: #13c0f0;
@@ -83,7 +80,7 @@
   }
 
   .word {
-    transition: color .3s;
+    transition: color .3s, opacity .3s;
     display: inline-block;
     position: relative;
   }
@@ -103,15 +100,45 @@
     }
   }
 
-  .space { transition: opacity .3s; }
+  .space { transition: opacity .3s, color .3s; }
   .active { cursor: default; }
-  .bite { color: rgba(255,255,255,0); }
+  .bite { color: rgba(255,255,255,0); opacity: 0;}
+
+  .clone .bite {
+    transition: all 0s;
+    opacity: 0;
+  }
+
+  .overflow::before {
+    display:   block;
+    width:     100%;
+    height:    30px;
+    position:  absolute;
+    left:      0;
+    bottom:    0;
+    content:   "";
+    transition: background .3s;
+    -webkit-background: radial-gradient(at bottom, rgba(255,204,141,1), rgba(255,0,0,0) 66%);
+    background: radial-gradient(at bottom, rgba(255,204,141,1), rgba(255,0,0,0) 66%);
+    background-position: 0 30px;
+    background-repeat: no-repeat;
+    animation: its-all-over .2s alternate 2;
+  }
+
+  @keyframes its-all-over {
+    to {
+      background-position: 0 0;
+    }
+  }
 
   .download-instructions {
     font-family: inherit;
-    .download-input, .download-output {
+    .download {
       cursor: pointer;
-      color: var(--primary)
+      color: var(--primary);
+      &:hover {
+        color: var(--hover);
+      }
     }
   }
 }

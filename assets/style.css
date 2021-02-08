@@ -1,8 +1,6 @@
 *::selection {
-  background-color: transparent; }
-
-*:focus, *:active {
-  outline: -webkit-focus-ring-color auto 1px; }
+  background-color: transparent;
+}
 
 .eatsweet {
   --primary: #63281B;
@@ -11,79 +9,127 @@
   width: 800px;
   position: relative;
   margin: 0 auto;
-  font-family: "Baskerville", serif; }
-  .eatsweet .intro {
-    padding: 2em;
-    font-size: 18pt;
-    text-align: center;
-    letter-spacing: .5px; }
-    .eatsweet .intro .next-text {
-      cursor: pointer;
-      color: var(--primary); }
-      .eatsweet .intro .next-text:hover {
-        color: var(--hover); }
-  .eatsweet .tools-sharing {
-    padding: 4em;
-    font-size: 18pt;
-    text-align: center; }
-  .eatsweet .pages {
-    display: block;
-    width: 100%;
-    text-align: center; }
-  .eatsweet .tools-input,
-  .eatsweet .tools-output {
-    display: inline-block;
-    position: relative; }
-  .eatsweet .input, .eatsweet .output {
-    --w: 380px;
-    --h: 540px;
-    width: var(--w);
-    height: var(--h);
-    float: left;
-    display: block;
-    margin: 0;
-    padding: 2.4em;
-    color: var(--body);
-    line-height: 1.5;
-    font-size: 12pt;
-    letter-spacing: .4px;
-    text-align: left;
-    /* text-align: justify; */
-    text-justify: inter-word;
-    background-image: url("paper.jpg");
-    background-size: var(--w) var(--h);
-    background-color: #eee; }
-  .eatsweet .input {
-    margin-right: 10px; }
-    .eatsweet .input .word:not(.active) {
-      cursor: pointer; }
-      .eatsweet .input .word:not(.active):hover {
-        color: #f0c013; }
-  .eatsweet .word {
-    transition: color .3s;
-    display: inline-block;
-    position: relative; }
-  .eatsweet .add-space {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    bottom: 20px;
-    left: 0;
-    color: var(--body); }
-    .eatsweet .add-space .space {
-      cursor: pointer; }
-      .eatsweet .add-space .space:hover {
-        color: var(--primary); }
-  .eatsweet .space {
-    transition: opacity .3s; }
-  .eatsweet .active {
-    cursor: default; }
-  .eatsweet .bite {
-    color: rgba(255, 255, 255, 0); }
-  .eatsweet .download-instructions {
-    font-family: inherit; }
-    .eatsweet .download-instructions .download-input, .eatsweet .download-instructions .download-output {
-      cursor: pointer;
-      color: var(--primary); }
+  font-family: "Baskerville", serif;
+}
+.eatsweet .intro {
+  padding: 2em;
+  font-size: 18pt;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.eatsweet .intro .next-text {
+  cursor: pointer;
+  color: var(--primary);
+}
+.eatsweet .intro .next-text:hover {
+  color: var(--hover);
+}
+.eatsweet .tools-sharing {
+  padding: 4em;
+  font-size: 18pt;
+  text-align: center;
+}
+.eatsweet .pages {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.eatsweet .tools-input,
+.eatsweet .tools-output {
+  display: inline-block;
+  position: relative;
+}
+.eatsweet .input, .eatsweet .output {
+  --w: 380px;
+  --h: 540px;
+  width: var(--w);
+  height: var(--h);
+  float: left;
+  display: block;
+  margin: 0;
+  padding: 2.4em;
+  color: var(--body);
+  line-height: 1.5;
+  font-size: 12pt;
+  letter-spacing: 0.4px;
+  text-align: left;
+  /* text-align: justify; */
+  text-justify: inter-word;
+  background-image: url("paper.jpg");
+  background-size: var(--w) var(--h);
+  background-color: #eee;
+}
+.eatsweet .input {
+  margin-right: 10px;
+}
+.eatsweet .input .word:not(.active) {
+  cursor: pointer;
+}
+.eatsweet .input .word:not(.active):hover {
+  color: #f0c013;
+}
+.eatsweet .word {
+  transition: color 0.3s, opacity 0.3s;
+  display: inline-block;
+  position: relative;
+}
+.eatsweet .add-space {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  bottom: 20px;
+  left: 0;
+  color: var(--body);
+}
+.eatsweet .add-space .space {
+  cursor: pointer;
+}
+.eatsweet .add-space .space:hover {
+  color: var(--primary);
+}
+.eatsweet .space {
+  transition: opacity 0.3s, color 0.3s;
+}
+.eatsweet .active {
+  cursor: default;
+}
+.eatsweet .bite {
+  color: rgba(255, 255, 255, 0);
+  opacity: 0;
+}
+.eatsweet .clone .bite {
+  transition: all 0s;
+  opacity: 0;
+}
+.eatsweet .overflow::before {
+  display: block;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  content: "";
+  transition: background 0.3s;
+  -webkit-background: radial-gradient(at bottom, #ffcc8d, rgba(255, 0, 0, 0) 66%);
+  background: radial-gradient(at bottom, #ffcc8d, rgba(255, 0, 0, 0) 66%);
+  background-position: 0 30px;
+  background-repeat: no-repeat;
+  animation: its-all-over 0.2s alternate 2;
+}
+@keyframes its-all-over {
+  to {
+    background-position: 0 0;
+  }
+}
+.eatsweet .download-instructions {
+  font-family: inherit;
+}
+.eatsweet .download-instructions .download {
+  cursor: pointer;
+  color: var(--primary);
+}
+.eatsweet .download-instructions .download:hover {
+  color: var(--hover);
+}
 
 /*# sourceMappingURL=style.css.map */
