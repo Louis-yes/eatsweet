@@ -54,46 +54,51 @@ function willOverflow(el, newContent) {
 	return isOver;
 }
 
+function indicateOverflow(el) {
+	el.classList.add('overflow');
+	window.setTimeout(function(){
+		el.classList.remove('overflow');
+	}, 400);
+}
+
 function event_handler_input(e) {
-	if (e.keyCode == 13 || e.type == "click" || e.type == "mouseover"){
-		var tt = e.target;
-	  var index = tt.dataset.index;
-	  var cl = tt.classList;
-	  if(cl.contains("word") && !cl.contains("active")) {
-			var word = pp.words[index].replace(symbolReg, '');
-			word = word.length > 1 ? word.toLowerCase() : word;
-			var str = " " + wordsTemplate(word, index);
-			if(!willOverflow(output, str)){
-				output.innerHTML += str;
-				cl.add("active");
-				cl.add("bite");
-				tt.tabIndex = -1;
-				pp.select(index);
-			} else {
-				console.log (pp.words[index], "wont fit")
-				output.classList.add('overflow');
-				window.setTimeout(function(){
-					output.classList.remove('overflow');
-				}, 400)
-			}
-	  }
+	var tt = e.target, index = tt.dataset.index, cl = tt.classList;
+	if (
+		cl.contains("word") && !cl.contains("active") &&
+		(e.keyCode == 13 || e.type == "click" || e.type == "mouseover")
+	){
+		var word = pp.words[index].replace(symbolReg, '');
+		word = word.length > 1 ? word.toLowerCase() : word;
+		var str = " " + wordsTemplate(word, index);
+		if(!willOverflow(output, str)){
+			output.innerHTML += str;
+			cl.add("active");
+			cl.add("bite");
+			tt.tabIndex = -1;
+			pp.select(index);
+		} else {
+			indicateOverflow(output);
+		}
 	}
 }
 
 function event_handler_addSpace(e) {
 	if (
-		e.target.classList.contains('space') && (
-		e.keyCode == 13 ||
-		e.type == "click" ||
-		e.type == "mouseover")
+		e.target.classList.contains('space') &&
+		(e.keyCode == 13 || e.type == "click" || e.type == "mouseover")
 	){
 		var cc = document.createElement('span');
 		cc.classList.add('space');
+		var spc =
 		cc.innerHTML += e.target.innerHTML;
-	  output.appendChild(cc);
-	  window.setTimeout(function(){
-	    output.querySelector('.space:not(.bite)').classList.add('bite')
-	  }, 300)
+		if(!willOverflow(output, cc.outerHTML)){
+			output.appendChild(cc);
+		  window.setTimeout(function(){
+		    output.querySelector('.space:not(.bite)').classList.add('bite')
+		  }, 300)
+		} else {
+			indicateOverflow(output);
+		}
 	}
 }
 
@@ -129,18 +134,6 @@ function event_handler_download(e) {
 	}
 }
 
-function createSaveName(oo, type){
-	if (type == "input") {
-		return "reduced_"+window.currText.title.split(" ").join("_");
-	} else {
-		var svnm = []
-		for (var i = 0; i < 3; i++) {
-			if (oo.activeWords[i]) { svnm.push(oo.words[oo.activeWords[i]]) }
-		}
-		return svnm.length > 0 ? svnm.join("_") : "blank";
-	}
-}
-
 function event_handler_next(e) {
 	updateText();
 }
@@ -149,7 +142,6 @@ var addSpace = document.querySelector('.add-space')
 addSpace.addEventListener('click', event_handler_addSpace)
 addSpace.addEventListener('keydown', event_handler_addSpace);
 addSpace.addEventListener('mouseover', function(e){ if (window.mousePressed) { event_handler_addSpace(e) } });
-
 
 var nextText = document.querySelector('.next-text');
 nextText.addEventListener('click', event_handler_next);

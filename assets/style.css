@@ -73,6 +73,10 @@
   display: inline-block;
   position: relative;
 }
+.eatsweet .word:focus, .eatsweet .word:active {
+  outline: none;
+  color: var(--primary);
+}
 .eatsweet .add-space {
   position: absolute;
   width: 100%;
