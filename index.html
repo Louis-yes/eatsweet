@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Ex libris, something sweet</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/tachyons.min.css">
   <link rel="stylesheet" href="assets/style.css"/>
-  <script type="text/javascript" src="assets/promise.min.js"></script>
-  <script type="text/javascript" src="assets/html2canvas.min.js"></script>
 </head>
 <body>
   <main class="main">
@@ -20,14 +20,14 @@
       </div>
       <div class="pages">
         <div class="tools-input">
+          <!-- this is where the input text will go -->
           <div class="input"></div>
           <span class="add-space">
-            <span tabindex="0" class="space space-one ~"> ~~~ </span>        |
-            <span tabindex="0" class="space space-three ~~~"> ~~~~~~ </span>  |
-            <span tabindex="0" class="space space-eight"> ~~~~~~~~~~~~ </span>
+            <span tabindex="0" class="space space-one"></span>
           </span>
         </div>
         <div class="tools-output">
+          <!-- this is the output text will be -->
           <div class="output"></div>
         </div>
       </div>
@@ -36,17 +36,33 @@
           <span class="download" data-download-target=".output">download the new text</span>, or
           <span class="download" data-download-target=".input">what’s left of the old text</span></span>
       </div>
+      <footer class="footer">
+        <span>
+          colophon
+        </span>
+        <div>
+          <ul class="list pl0">
+            <li>css library <a href="">tachyons</a> by <a href="">name here</a></li>
+            <li><a href="">html2canvas</a> by <a href="">somebody</a></li>
+            <li>worm by <a href="https://thenounproject.com/sgurkova/">Sasha Sash</a> from the <a href="https://thenounproject.com/">Noun Project</a></li>
+            <li>font <a href="">font name</a> </li>
+          </ul>
+        </div>
+      </footer>
     </section>
+
   </main>
   <script>
+    // we need a better way of doing this
     window.texts = [
-      "Slaughter House 5|Kurt Vonnegut|An idiotic Englishman, who had lost all his teeth somewhere had his souvenir in a canvas bag. The bag was resting on my insteps. He would peek into the bag every now and then, and he would roll his eyes and swivel his scrawny neck, trying to catch people looking covetously at his bag. And he would bounce the bag on my insteps. I thought this bouncing was accidental. But I was mistaken. He had to show somebody what was in the bag, and he had decided he could trust me. He caught my eye, winked, opened the bag. There was a plaster model of the Eiffel Tower in there. It was painted gold. It had a clock in it. 'There's a smashin' thing,' he said.",
+      "Slaughter House 5|Kurt Vonnegut|An idiotic Englishman, who had lost all his teeth somewhere had his souvenir in a canvas bag. The bag was resting on my insteps. He would peek into the bag every now and then, and he would roll his eyes and swivel his scrawny neck, trying to catch people looking covetously at his bag. And he would bounce the bag on my insteps. I thought this bouncing was accidental. But I was mistaken. He had to show somebody what was in the bag, and he had decided he could trust me. He caught my eye, winked, opened the bag. There was a plaster model of the Eiffel Tower in there. It was painted gold. It had a clock in it.",
       "Pride and Prejudice|Jane Austen|It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters. “My dear Mr. Bennet,” said his lady to him one day, “have you heard that Netherfield Park is let at last? ”Mr. Bennet replied that he had not. “But it is,” returned she; “for Mrs. Long has just been here, and she told me all about it.” Mr. Bennet made no answer. “Do you not want to know who has taken it?” cried his wife impatiently. “You want to tell me, and I have no objection to hearing it.” This was invitation enough.",
       "A Tale of Two Cities|Charles Dickens|It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the other way—in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only.",
       "Wikipedia Article about Horses|Wikipedia|The horse (Equus ferus caballus)[2][3] is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today. Humans began domesticating horses around 4000 BC, and their domestication is believed to have been widespread by 3000 BC. Horses in the subspecies caballus are domesticated, although some domesticated populations live in the wild as feral horses. These feral populations are not true wild horses, as this term"
     ]
   </script>
+  <script type="text/javascript" src="assets/promise.min.js"></script>
+  <script type="text/javascript" src="assets/html2canvas.min.js"></script>
   <script src="assets/eatsweet.js"></script>
-
 </body>
 </html>

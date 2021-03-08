@@ -1,8 +1,20 @@
+// TODO
+// Make this work as a plugin,
+// with an options object passed in,
+// or data attributes added to elements.
+//
+// - animate words adding - try a wee lag
+// - state transitions, slow down transitions
+// - fill in colophon
+//
+// - create list of texts
+
+// this is for turning input text into a list. It might be a bit overkill...
+// but I like to separate it out
 var WordDealer = (function () {
-	'use strict';
 	var Constructor = function (inputText, spacer) {
    var papi = {};
-   var spacer = papi.spacer = spacer || ' ';
+   var spacer = papi.spacer = spacer || ' '; // spacer default is a space, this is use for splitting and joining the text
    var words = papi.words = inputText.split(spacer);
    var activeWords = papi.activeWords = [];
    papi.select = function (ii) { activeWords.push(ii); }
@@ -11,19 +23,32 @@ var WordDealer = (function () {
   return Constructor;
 })();
 
+function hide(el){
+	el.classList.add("bite");
+	el.tabIndex = -1;
+}
+
+function show(el){
+	el.classList.remove("bite");
+	el.tabIndex = "";
+}
+
 // global mousepressed listener
 window.mousePressed = false;
 document.addEventListener('mousedown', function(e){window.mousePressed = true;});
 document.addEventListener('mouseup', function(e){window.mousePressed = false;});
 
+// the input element
 var input = document.querySelector('.input');
+// the output element
 var output = document.querySelector('.output');
+// the description element
 var titleDescription = document.querySelector('.title-description');
 
 var textIndex = window.texts.length;
 var symbolReg = /(^\W+)|(\W+$)/g;
 
-function wordsTemplate(w,i){ return `<span tabindex="0" class="word ${w}" data-index="${i}">${w}</span>` }
+function wordsTemplate(w,i){ return `<span tabindex="0" class="word" data-index="${i}">${w}</span>` }
 function render_input(rr){ return pp.words.map((w,i) => wordsTemplate(w,i)).join(pp.spacer) }
 function render_description(txt){ return `Here's some of <em>${txt.title}.</em>`}
 function updateSource() {
@@ -32,6 +57,7 @@ function updateSource() {
 	output.innerHTML = "";
 }
 function updateText(){
+
 	textIndex = textIndex < window.texts.length -1 ? textIndex + 1 : 0;
 	var newText = window.texts[textIndex].split("|");
 	var currText = window.currText = {author:newText[1], title: newText[0], contents:newText[2]}
@@ -43,7 +69,6 @@ updateText();
 
 function willOverflow(el, newContent) {
 	function isOverflown(element) {
-		console.log(element.scrollHeight,element.clientHeight)
 		return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
 	}
 	var clone = el.cloneNode(true);
@@ -62,7 +87,10 @@ function indicateOverflow(el) {
 }
 
 function event_handler_input(e) {
-	var tt = e.target, index = tt.dataset.index, cl = tt.classList;
+	var tt = e.target;
+	var index = tt.dataset.index;
+	var cl = tt.classList;
+
 	if (
 		cl.contains("word") && !cl.contains("active") &&
 		(e.keyCode == 13 || e.type == "click" || e.type == "mouseover")
@@ -72,13 +100,10 @@ function event_handler_input(e) {
 		var str = " " + wordsTemplate(word, index);
 		if(!willOverflow(output, str)){
 			output.innerHTML += str;
+			// hide(e.target);
 			cl.add("active");
-			cl.add("bite");
-			tt.tabIndex = -1;
-			pp.select(index);
-		} else {
-			indicateOverflow(output);
-		}
+			hide(tt);
+		} else { indicateOverflow(output); }
 	}
 }
 
@@ -89,16 +114,13 @@ function event_handler_addSpace(e) {
 	){
 		var cc = document.createElement('span');
 		cc.classList.add('space');
-		var spc =
 		cc.innerHTML += e.target.innerHTML;
 		if(!willOverflow(output, cc.outerHTML)){
 			output.appendChild(cc);
 		  window.setTimeout(function(){
-		    output.querySelector('.space:not(.bite)').classList.add('bite')
+		    hide(output.querySelector('.space:not(.bite)'))
 		  }, 300)
-		} else {
-			indicateOverflow(output);
-		}
+		} else { indicateOverflow(output); }
 	}
 }
 
@@ -110,7 +132,7 @@ function event_handler_download(e) {
 		html2canvas(
 			document.querySelector(el),
 			{
-				width:output.clientWidth,
+				width: output.clientWidth,
 				height: output.clientHeight,
 				scrollX: -window.scrollX,
 				scrollY: -window.scrollY,

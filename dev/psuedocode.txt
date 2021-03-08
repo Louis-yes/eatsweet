@@ -1,0 +1,23 @@
+setVisibility => el => show
+  el.style.opacity = show ? 1 : 0
+
+Hide => el
+ setVisibility => el => false
+
+Show => el
+ setVisibility => el => false
+
+splitWrap => string => html
+  string.split(' ').map(w => return `<span class="erasable">${w}</span>`).join(" ")
+
+app on click/keydown/drag =>
+  if hasClass(target, erasable) 
+    Hide => target
+    app.trigger('erased', target)
+
+app on erased => target
+  if(overflows(container, extraContent)) app.trigger('overflow') 
+  else addWord => word => container app.trigger('added', target)
+
+
+

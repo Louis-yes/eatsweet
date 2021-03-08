@@ -1,17 +1,25 @@
+$primary: #63281B;
+$hover: #13c0f0;
+$body: #444;
+
+$w : 440px;
+$h : 620px;
+
 *::selection{
   background-color: transparent;
 }
 
-.eatsweet {
-  --primary: #63281B;
-  --hover: #13c0f0;
-  --body: #444;
+@font-face {
+  font-family: "Space";
+  src: url("space.woff") format("woff2");
+}
 
-  width: 800px;
+.eatsweet {
+  max-width: 900px;
   position: relative;
   margin: 0 auto;
 
-  font-family: "Baskerville", serif;
+  font-family: 'EB Garamond', serif;
 
   .intro {
     padding: 2em;
@@ -20,9 +28,9 @@
     letter-spacing: .5px;
     .next-text {
       cursor: pointer;
-      color: var(--primary);
+      color: $primary;
       &:hover {
-        color:var(--hover);
+        color:$hover;
       }
     }
   }
@@ -39,6 +47,16 @@
     text-align: center;
   }
 
+  .space {
+    display: inline-block;
+    padding:0 4px;
+    &:before {
+      content: '\e900';
+      font-family: "Space";
+      font-size: 6px;
+    }
+  }
+
   .tools-input,
   .tools-output {
     display: inline-block;
@@ -46,48 +64,51 @@
   }
 
   .input, .output {
-    --w : 380px;
-    --h : 540px;
-
-    width: var(--w);
-    height: var(--h);
+    width: $w;
+    height: $h;
     float: left;
     display: block;
 
     margin: 0;
-    padding: 2.4em;
+    padding: 2em 2.3em;
 
-    color: var(--body);
+    color: $body;
     line-height: 1.5;
-    font-size: 12pt;
+    font-size: 1.3em;
     letter-spacing: .4px;
     text-align: left;
 
-    /* text-align: justify; */
-    text-justify: inter-word;
-
     background-image: url("paper.jpg");
-    background-size: var(--w) var(--h);
+    background-size: $w $h;
     background-color: #eee;
+    .word:focus, .word:active {
+      outline: none;
+    }
   }
+
   .input {
     margin-right: 10px;
-
+    text-align: justify;
+    text-justify: inter-word;
+    cursor: url("worm.svg"), auto;
+    .word {
+      transition: color .3s, opacity .3s;
+      display: inline-block;
+      position: relative;
+      &:focus, &:active {
+        outline: none;
+        color: #f0c013;
+      }
+    }
     .word:not(.active){
-      cursor: pointer;
       &:hover { color: #f0c013; }
     }
   }
-
-  .word {
-    transition: color .3s, opacity .3s;
-    display: inline-block;
-    position: relative;
-    &:focus, &:active {
-      outline: none;
-      color: var(--primary);
-    }
+  .output {
+    cursor: default;
   }
+
+
 
   .add-space {
     position: absolute;
@@ -96,36 +117,36 @@
     bottom: 20px;
     left:0;
 
-    color: var(--body);
+    color: $body;
 
     .space {
-      cursor: pointer;
-      &:hover { color: var(--primary) }
+      cursor: url("worm.svg"), auto;
+      &:focus, &:active { outline: none; }
+      &:hover { color: $primary }
     }
   }
 
   .space { transition: opacity .3s, color .3s; }
-  .active { cursor: default; }
+  // .active { cursor: default; }
   .bite { color: rgba(255,255,255,0); opacity: 0;}
 
-  .clone .bite {
-    transition: all 0s;
-    opacity: 0;
-  }
-
   .overflow::before {
+    content:   "";
+
     display:   block;
     width:     100%;
     height:    30px;
     position:  absolute;
     left:      0;
     bottom:    0;
-    content:   "";
+
     transition: background .3s;
+
     -webkit-background: radial-gradient(at bottom, rgba(255,204,141,1), rgba(255,0,0,0) 66%);
     background: radial-gradient(at bottom, rgba(255,204,141,1), rgba(255,0,0,0) 66%);
     background-position: 0 30px;
     background-repeat: no-repeat;
+
     animation: its-all-over .2s alternate 2;
   }
 
@@ -139,10 +160,17 @@
     font-family: inherit;
     .download {
       cursor: pointer;
-      color: var(--primary);
+      color: $primary;
       &:hover {
-        color: var(--hover);
+        color: $hover;
       }
     }
+  }
+
+  footer {
+    padding: 20px;
+    font-style: italic;
+    font-size: 16pt;
+    text-align: center;
   }
 }
