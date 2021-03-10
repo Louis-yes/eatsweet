@@ -1,139 +1,221 @@
 // TODO
-// Make this work as a plugin,
-// with an options object passed in,
-// or data attributes added to elements.
-//
-// - animate words adding - try a wee lag
-// - state transitions, slow down transitions
+// - initial view
+// - add interesting intros
 // - fill in colophon
-//
 // - create list of texts
+//
+// Fin
 
-// this is for turning input text into a list. It might be a bit overkill...
-// but I like to separate it out
-var WordDealer = (function () {
-	var Constructor = function (inputText, spacer) {
-   var papi = {};
-   var spacer = papi.spacer = spacer || ' '; // spacer default is a space, this is use for splitting and joining the text
-   var words = papi.words = inputText.split(spacer);
-   var activeWords = papi.activeWords = [];
-   papi.select = function (ii) { activeWords.push(ii); }
-   return papi;
-  }
-  return Constructor;
+var Erasure = (function() {
+		window.Erasure = {}
+		// global mousepressed listener
+		window.Erasure.mousePressed = false;
+		document.addEventListener('mousedown', function(e){window.Erasure.mousePressed = true;});
+		document.addEventListener('mouseup', function(e){window.Erasure.mousePressed = false;});
+
+		function setVisibility(el, show) {
+			el.tabIndex = show ? 0 : -1;
+		}
+
+		function splitWrap (string, classname) {
+			return string.split(' ').map(w => { return `<span class="${classname}" tabindex="0">${w}</span>`}).join(' ');
+		}
+
+		function hide(el){
+			setVisibility(el, false)
+		}
+
+		function show(el){
+			setVisibility(el, true)
+		}
+
+		window.Erasure.show = show;
+		window.Erasure.hide = hide;
+
+		var Constructor = function(el, ec){
+			var eraseClass = ec || "erase-able";
+			var erasedClass = "erased";
+			function erase (e) {
+				if (
+					e.target.classList.contains(eraseClass)
+					&& !e.target.classList.contains(erasedClass)
+				) {
+					hide(e.target);
+					e.target.classList.add(erasedClass);
+					var erased = new Event("erased", {bubbles: true});
+					e.target.dispatchEvent(erased);
+				}
+			}
+
+			function update (string) {
+				el.innerHTML = splitWrap(string, eraseClass)
+				var updated = new Event("updated", {bubbles: true});
+				el.dispatchEvent(updated);
+			}
+
+			var pf = {}
+			pf.update = update;
+			el.erasure = pf;
+			el.addEventListener("click", erase)
+			el.addEventListener("keydown", function(e) { if(e.code === "Enter") { erase(e) } })
+			el.addEventListener("mouseover", function(e) { if( window.Erasure.mousePressed ) { erase(e) }});
+
+			// touch events?
+
+			update(el.innerText);
+			return el;
+		}
+		return Constructor;
 })();
 
-function hide(el){
-	el.classList.add("bite");
-	el.tabIndex = -1;
-}
-
-function show(el){
-	el.classList.remove("bite");
-	el.tabIndex = "";
-}
-
-// global mousepressed listener
-window.mousePressed = false;
-document.addEventListener('mousedown', function(e){window.mousePressed = true;});
-document.addEventListener('mouseup', function(e){window.mousePressed = false;});
-
-// the input element
-var input = document.querySelector('.input');
-// the output element
-var output = document.querySelector('.output');
-// the description element
-var titleDescription = document.querySelector('.title-description');
-
-var textIndex = window.texts.length;
-var symbolReg = /(^\W+)|(\W+$)/g;
-
-function wordsTemplate(w,i){ return `<span tabindex="0" class="word" data-index="${i}">${w}</span>` }
-function render_input(rr){ return pp.words.map((w,i) => wordsTemplate(w,i)).join(pp.spacer) }
-function render_description(txt){ return `Here's some of <em>${txt.title}.</em>`}
-function updateSource() {
-	titleDescription.innerHTML = render_description(window.currText);
-	input.innerHTML = render_input(pp.words);
-	output.innerHTML = "";
-}
-function updateText(){
-
-	textIndex = textIndex < window.texts.length -1 ? textIndex + 1 : 0;
-	var newText = window.texts[textIndex].split("|");
-	var currText = window.currText = {author:newText[1], title: newText[0], contents:newText[2]}
-	pp = new WordDealer(currText.contents,' ');
-	updateSource();
-}
-var pp = {};
-updateText();
-
-function willOverflow(el, newContent) {
-	function isOverflown(element) {
-		return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+var eatsweet = (function() {
+	var texts = [];
+	var currentText = 0;
+	function willOverflow(el, newContent) {
+		function isOverflown(element) {
+			return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+		}
+		var clone = el.cloneNode(true);
+		clone.innerHTML += newContent;
+		el.parentNode.appendChild(clone)
+		var isOver = isOverflown(clone);
+		el.parentNode.removeChild(clone);
+		delete clone
+		return isOver;
 	}
-	var clone = el.cloneNode(true);
-	clone.innerHTML += newContent;
-	el.parentNode.appendChild(clone)
-	var isOver = isOverflown(clone);
-	el.parentNode.removeChild(clone);
-	return isOver;
-}
 
-function indicateOverflow(el) {
-	el.classList.add('overflow');
-	window.setTimeout(function(){
-		el.classList.remove('overflow');
-	}, 400);
-}
-
-function event_handler_input(e) {
-	var tt = e.target;
-	var index = tt.dataset.index;
-	var cl = tt.classList;
-
-	if (
-		cl.contains("word") && !cl.contains("active") &&
-		(e.keyCode == 13 || e.type == "click" || e.type == "mouseover")
-	){
-		var word = pp.words[index].replace(symbolReg, '');
-		word = word.length > 1 ? word.toLowerCase() : word;
-		var str = " " + wordsTemplate(word, index);
-		if(!willOverflow(output, str)){
-			output.innerHTML += str;
-			// hide(e.target);
-			cl.add("active");
-			hide(tt);
-		} else { indicateOverflow(output); }
+	function fadeIn (el) {
+		el.classList.add("erased");
+		requestAnimationFrame(function(){
+			el.classList.remove("erased");
+			if(el.classList.contains("space")) {
+				window.setTimeout(function(){
+					el.classList.add("erased");
+				}, 300);
+			}
+		});
 	}
-}
 
-function event_handler_addSpace(e) {
-	if (
-		e.target.classList.contains('space') &&
-		(e.keyCode == 13 || e.type == "click" || e.type == "mouseover")
-	){
-		var cc = document.createElement('span');
-		cc.classList.add('space');
-		cc.innerHTML += e.target.innerHTML;
-		if(!willOverflow(output, cc.outerHTML)){
-			output.appendChild(cc);
-		  window.setTimeout(function(){
-		    hide(output.querySelector('.space:not(.bite)'))
-		  }, 300)
-		} else { indicateOverflow(output); }
+	function fadeOut (el) {
+		el.classList.add("erased");
 	}
-}
 
+	function triggerOverflow(el) {
+		console.log('hell ya')
+			el.classList.add('overflow');
+			window.setTimeout(function(){
+				el.classList.remove('overflow');
+			}, 400);
+	}
+
+	function addToContainer (output, el) {
+		if(willOverflow(output, el.outerHTML)){
+			triggerOverflow(output);
+		} else {
+			el.classList.add("before-add");
+			output.appendChild(el);
+			window.requestAnimationFrame(function(){
+				el.classList.remove("before-add");
+				el.classList.add("after-add");
+			});
+			var added = new Event("added", {bubbles: true});
+			el.dispatchEvent(added);
+		}
+	}
+
+	var Constructor = function(opts){
+		var input = opts.input;
+		var output = opts.output;
+		var description = opts.description;
+		var space = opts.space;
+		texts = opts.texts;
+
+		function addWord (e) {
+			var symbolReg = /(^\W+)|(\W+$)/g;
+			var el = document.createElement('span');
+			var word = e.innerText;
+			word = word.length > 1 ? word.toLowerCase();
+			el.className = "word";
+			el.innerText = word.replace(symbolReg,"") + " ";
+			addToContainer(output, el);
+		}
+
+		function addSpace (e) {
+			var el = document.createElement('span');
+			el.className = "word space";
+			addToContainer(output, el);
+		}
+
+		function updateText (string, cb) {
+			fadeOut(input)
+			fadeOut(output)
+			window.setTimeout(function(){
+				output.innerHTML = "";
+				input.erasure.update(string);
+				fadeIn(input);
+				fadeIn(output);
+				cb();
+			}, 700)
+		}
+
+		function changeText (e, n){
+			if(e.target.classList.contains("change-text") && !description.classList.contains("updating")){
+				var descriptionTemplates = [ "Here's some of" ];
+				var txt;
+				currentText = n || currentText < texts.length -1 ? currentText + 1 : 0;
+				txt = texts[currentText];
+				fadeOut(description);
+				description.classList.add("updating");
+				updateText(txt.content, function(){
+					description.innerHTML = `
+						<span class="title-description">Here's some of <em>${txt.title}</em> by <em>${txt.author}</em></span>
+						<br>
+						<span class="change-text">want something different?</span>
+					`
+					description.classList.remove("updating");
+					fadeIn(description);
+				});
+			}
+		}
+
+		input = new Erasure(input);
+		// changeText("", 0);
+		input.addEventListener("erased", addWord);
+		output.addEventListener("added", function(e){fadeIn(e.target)});
+		space.addEventListener("click", addSpace);
+		description.addEventListener("click", changeText);
+
+		return {
+			texts: texts,
+			currentText: function(){return texts[currentText]}
+		}
+	}
+	return Constructor;
+})();
+
+var texts = window.texts.map(t => {
+	var nt = t.split("|");
+	return {title: nt[0], author: nt[1], content: nt[2]}
+})
+
+var poem = new eatsweet({
+	input: document.querySelector('.input'),
+	output: document.querySelector('.output'),
+	description: document.querySelector('.intro'),
+	space: document.querySelector('.space'),
+	texts: texts
+})
+
+var download = document.querySelector('.tools-sharing');
 function event_handler_download(e) {
 	if(e.target.classList.contains('download')){
 		var el = e.target.dataset.downloadTarget || ".output";
-		console.log(el)
 		var type = e.target.dataset.downloadType || "composition";
 		html2canvas(
 			document.querySelector(el),
 			{
-				width: output.clientWidth,
-				height: output.clientHeight,
+				width: document.querySelector(el).clientWidth,
+				height: document.querySelector(el).clientHeight,
 				scrollX: -window.scrollX,
 				scrollY: -window.scrollY,
 				windowWidth: document.documentElement.offsetWidth,
@@ -144,7 +226,7 @@ function event_handler_download(e) {
 				}
 			}
 		).then(function(canvas) {
-			var fileName = "refined_from_" + window.currText.title.split(" ").join("_");
+			var fileName = "refined_from_" + poem.currentText().title.split(" ").join("_");
 			var img = document.createElement('img');
 			var link = document.createElement('a');
 
@@ -155,24 +237,5 @@ function event_handler_download(e) {
 		});
 	}
 }
-
-function event_handler_next(e) {
-	updateText();
-}
-
-var addSpace = document.querySelector('.add-space')
-addSpace.addEventListener('click', event_handler_addSpace)
-addSpace.addEventListener('keydown', event_handler_addSpace);
-addSpace.addEventListener('mouseover', function(e){ if (window.mousePressed) { event_handler_addSpace(e) } });
-
-var nextText = document.querySelector('.next-text');
-nextText.addEventListener('click', event_handler_next);
-nextText.addEventListener('keydown', event_handler_next);
-
-input.addEventListener('click', event_handler_input);
-input.addEventListener('keydown', event_handler_input);
-input.addEventListener('mouseover', function(e){ if (window.mousePressed) { event_handler_input(e) } });
-
-var download = document.querySelector('.tools-sharing');
 if(!html2canvas) { download.parentNode.removeChild(download) }
 else { download.addEventListener('click', event_handler_download);}

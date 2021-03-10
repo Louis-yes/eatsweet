@@ -1,3 +1,19 @@
+
+
+
+app.container.on('added')
+  is space character?
+    do space class stuff
+
+make app => el
+  app.added =>
+
+download button on click =>
+  createScreenshot => data-target => use target data-title
+
+
+=============================
+
 setVisibility => el => show
   el.style.opacity = show ? 1 : 0
 
@@ -10,14 +26,19 @@ Show => el
 splitWrap => string => html
   string.split(' ').map(w => return `<span class="erasable">${w}</span>`).join(" ")
 
-app on click/keydown/drag =>
-  if hasClass(target, erasable) 
-    Hide => target
-    app.trigger('erased', target)
+addWord => word => container
+  addClass(word, "before-add")
+  container.innerHTML += word // or container.appendChild
+  removeClass(word, "before-add")
+  addClass(word, "after-add")
+  container.trigger('added', target)
 
 app on erased => target
-  if(overflows(container, extraContent)) app.trigger('overflow') 
-  else addWord => word => container app.trigger('added', target)
+  if container
+    if(overflows(container, extraContent)) app.trigger('overflow')
+    else addWord => word => container app.trigger('added', target)
 
-
-
+app on click/keydown/drag =>
+  if hasClass(target, erasable)
+    Hide => target
+    app.trigger('erased', target)

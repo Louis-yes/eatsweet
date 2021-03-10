@@ -19,11 +19,11 @@
   text-align: center;
   letter-spacing: 0.5px;
 }
-.eatsweet .intro .next-text {
+.eatsweet .intro .change-text {
   cursor: pointer;
   color: #63281B;
 }
-.eatsweet .intro .next-text:hover {
+.eatsweet .intro .change-text:hover {
   color: #13c0f0;
 }
 .eatsweet .tools-sharing {
@@ -36,21 +36,19 @@
   width: 100%;
   text-align: center;
 }
-.eatsweet .space {
-  display: inline-block;
-  padding: 0 4px;
-}
-.eatsweet .space:before {
-  content: "";
-  font-family: "Space";
-  font-size: 6px;
-}
 .eatsweet .tools-input,
 .eatsweet .tools-output {
   display: inline-block;
   position: relative;
+  background-image: url("paper.jpg");
+  background-size: 440px 620px;
+  background-color: #eee;
+}
+.eatsweet .tools-input {
+  margin-right: 10px;
 }
 .eatsweet .input, .eatsweet .output {
+  overflow: hidden;
   width: 440px;
   height: 620px;
   float: left;
@@ -62,33 +60,41 @@
   font-size: 1.3em;
   letter-spacing: 0.4px;
   text-align: left;
-  background-image: url("paper.jpg");
-  background-size: 440px 620px;
-  background-color: #eee;
+  .erase-able-display: inline-block;
+  .erase-able-white-space: break-spaces;
 }
-.eatsweet .input .word:focus, .eatsweet .input .word:active, .eatsweet .output .word:focus, .eatsweet .output .word:active {
+.eatsweet .input .erase-able:focus, .eatsweet .input .erase-able:active, .eatsweet .output .erase-able:focus, .eatsweet .output .erase-able:active {
   outline: none;
 }
 .eatsweet .input {
-  margin-right: 10px;
   text-align: justify;
   text-justify: inter-word;
   cursor: url("worm.svg"), auto;
 }
-.eatsweet .input .word {
+.eatsweet .input .erase-able {
   transition: color 0.3s, opacity 0.3s;
   display: inline-block;
   position: relative;
 }
-.eatsweet .input .word:focus, .eatsweet .input .word:active {
+.eatsweet .input .erase-able:focus, .eatsweet .input .erase-able:active {
   outline: none;
   color: #f0c013;
 }
-.eatsweet .input .word:not(.active):hover {
+.eatsweet .input .erase-able:not(.active):hover {
   color: #f0c013;
 }
 .eatsweet .output {
   cursor: default;
+}
+.eatsweet .space {
+  display: inline;
+  padding: 0 4px;
+}
+.eatsweet .space:before {
+  color: inherit;
+  content: "";
+  font-family: "Space";
+  font-size: 6px;
 }
 .eatsweet .add-space {
   position: absolute;
@@ -104,14 +110,19 @@
 .eatsweet .add-space .space:focus, .eatsweet .add-space .space:active {
   outline: none;
 }
-.eatsweet .add-space .space:hover {
-  color: #63281B;
+.eatsweet .add-space .space:hover, .eatsweet .add-space .space:focus {
+  color: #13c0f0;
 }
 .eatsweet .space {
   transition: opacity 0.3s, color 0.3s;
 }
-.eatsweet .bite {
-  color: rgba(255, 255, 255, 0);
+.eatsweet .erase-able, .eatsweet .intro, .eatsweet .input, .eatsweet .output {
+  transition: opacity 0.3s ease-in-out;
+}
+.eatsweet .word, .eatsweet .space {
+  transition: opacity 0.5s ease-in-out;
+}
+.eatsweet .erased {
   opacity: 0;
 }
 .eatsweet .overflow::before {

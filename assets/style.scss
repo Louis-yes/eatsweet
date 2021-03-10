@@ -26,7 +26,7 @@ $h : 620px;
     font-size: 18pt;
     text-align: center;
     letter-spacing: .5px;
-    .next-text {
+    .change-text {
       cursor: pointer;
       color: $primary;
       &:hover {
@@ -47,23 +47,22 @@ $h : 620px;
     text-align: center;
   }
 
-  .space {
-    display: inline-block;
-    padding:0 4px;
-    &:before {
-      content: '\e900';
-      font-family: "Space";
-      font-size: 6px;
-    }
-  }
-
   .tools-input,
   .tools-output {
     display: inline-block;
     position: relative;
+
+    background-image: url("paper.jpg");
+    background-size: $w $h;
+    background-color: #eee;
+  }
+
+  .tools-input {
+    margin-right: 10px;
   }
 
   .input, .output {
+    overflow: hidden;
     width: $w;
     height: $h;
     float: left;
@@ -78,20 +77,20 @@ $h : 620px;
     letter-spacing: .4px;
     text-align: left;
 
-    background-image: url("paper.jpg");
-    background-size: $w $h;
-    background-color: #eee;
-    .word:focus, .word:active {
+    .erase-able: {
+      display: inline-block;
+      white-space: break-spaces;
+    }
+    .erase-able:focus, .erase-able:active {
       outline: none;
     }
   }
 
   .input {
-    margin-right: 10px;
     text-align: justify;
     text-justify: inter-word;
     cursor: url("worm.svg"), auto;
-    .word {
+    .erase-able {
       transition: color .3s, opacity .3s;
       display: inline-block;
       position: relative;
@@ -100,7 +99,7 @@ $h : 620px;
         color: #f0c013;
       }
     }
-    .word:not(.active){
+    .erase-able:not(.active){
       &:hover { color: #f0c013; }
     }
   }
@@ -108,7 +107,16 @@ $h : 620px;
     cursor: default;
   }
 
-
+  .space {
+    display: inline;
+    padding:0 4px;
+    &:before {
+      color: inherit;
+      content: '\e900';
+      font-family: "Space";
+      font-size: 6px;
+    }
+  }
 
   .add-space {
     position: absolute;
@@ -122,13 +130,20 @@ $h : 620px;
     .space {
       cursor: url("worm.svg"), auto;
       &:focus, &:active { outline: none; }
-      &:hover { color: $primary }
+      &:hover, &:focus { color: $hover }
     }
   }
 
   .space { transition: opacity .3s, color .3s; }
   // .active { cursor: default; }
-  .bite { color: rgba(255,255,255,0); opacity: 0;}
+  .erase-able, .intro, .input, .output {
+    transition: opacity .3s ease-in-out;
+  }
+  .word, .space {
+    transition: opacity .5s ease-in-out;
+  }
+
+  .erased { opacity: 0;}
 
   .overflow::before {
     content:   "";
