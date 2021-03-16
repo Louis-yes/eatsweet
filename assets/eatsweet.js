@@ -1,8 +1,5 @@
 // TODO
-// - trigger initial view
-// - add interesting intros
 // - fill in colophon
-// - create list of texts
 // - textured edges of pages
 // - add touch events
 // - finesse animation timings
