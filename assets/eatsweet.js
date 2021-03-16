@@ -1,10 +1,11 @@
 // TODO
-// - initial view
+// - trigger initial view
 // - add interesting intros
 // - fill in colophon
 // - create list of texts
-//
-// Fin
+// - textured edges of pages
+// - add touch events
+// - finesse animation timings
 
 var Erasure = (function() {
 		window.Erasure = {}
@@ -14,6 +15,7 @@ var Erasure = (function() {
 		document.addEventListener('mouseup', function(e){window.Erasure.mousePressed = false;});
 
 		function setVisibility(el, show) {
+			// handle all visibility with classnames for now
 			el.tabIndex = show ? 0 : -1;
 		}
 
@@ -56,6 +58,7 @@ var Erasure = (function() {
 			var pf = {}
 			pf.update = update;
 			el.erasure = pf;
+
 			el.addEventListener("click", erase)
 			el.addEventListener("keydown", function(e) { if(e.code === "Enter") { erase(e) } })
 			el.addEventListener("mouseover", function(e) { if( window.Erasure.mousePressed ) { erase(e) }});
@@ -72,9 +75,7 @@ var eatsweet = (function() {
 	var texts = [];
 	var currentText = 0;
 	function willOverflow(el, newContent) {
-		function isOverflown(element) {
-			return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
-		}
+		function isOverflown(element) { return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth; }
 		var clone = el.cloneNode(true);
 		clone.innerHTML += newContent;
 		el.parentNode.appendChild(clone)
@@ -101,11 +102,10 @@ var eatsweet = (function() {
 	}
 
 	function triggerOverflow(el) {
-		console.log('hell ya')
-			el.classList.add('overflow');
-			window.setTimeout(function(){
-				el.classList.remove('overflow');
-			}, 400);
+		el.classList.add('overflow');
+		window.setTimeout(function(){
+			el.classList.remove('overflow');
+		}, 400);
 	}
 
 	function addToContainer (output, el) {
@@ -133,8 +133,8 @@ var eatsweet = (function() {
 		function addWord (e) {
 			var symbolReg = /(^\W+)|(\W+$)/g;
 			var el = document.createElement('span');
-			var word = e.innerText;
-			word = word.length > 1 ? word.toLowerCase();
+			var word = e.target.innerText;
+			word = word.length > 1 ? word.toLowerCase() : word;
 			el.className = "word";
 			el.innerText = word.replace(symbolReg,"") + " ";
 			addToContainer(output, el);
@@ -158,8 +158,7 @@ var eatsweet = (function() {
 			}, 700)
 		}
 
-		function changeText (e, n){
-			if(e.target.classList.contains("change-text") && !description.classList.contains("updating")){
+		function changeText (n){
 				var descriptionTemplates = [ "Here's some of" ];
 				var txt;
 				currentText = n || currentText < texts.length -1 ? currentText + 1 : 0;
@@ -175,29 +174,32 @@ var eatsweet = (function() {
 					description.classList.remove("updating");
 					fadeIn(description);
 				});
-			}
 		}
 
 		input = new Erasure(input);
-		// changeText("", 0);
+		changeText(0);
 		input.addEventListener("erased", addWord);
 		output.addEventListener("added", function(e){fadeIn(e.target)});
 		space.addEventListener("click", addSpace);
-		description.addEventListener("click", changeText);
+		description.addEventListener("click", function(e){
+			if(e.target.classList.contains("change-text") && !description.classList.contains("updating")){
+				changeText();
+			}
+		});
 
 		return {
 			texts: texts,
-			currentText: function(){return texts[currentText]}
+			currentText: function(){return texts[currentText]},
+			fadeIn: fadeIn,
+			fadeOut: fadeOut
 		}
 	}
 	return Constructor;
 })();
 
 var texts = window.texts.map(t => {
-	var nt = t.split("|");
-	return {title: nt[0], author: nt[1], content: nt[2]}
-})
-
+	var nt = t.split("|"); return {title: nt[0], author: nt[1], content: nt[2]}
+});
 var poem = new eatsweet({
 	input: document.querySelector('.input'),
 	output: document.querySelector('.output'),
@@ -209,7 +211,7 @@ var poem = new eatsweet({
 var download = document.querySelector('.tools-sharing');
 function event_handler_download(e) {
 	if(e.target.classList.contains('download')){
-		var el = e.target.dataset.downloadTarget || ".output";
+		var el = e.target.dataset.downloadTarget || ".output-tools";
 		var type = e.target.dataset.downloadType || "composition";
 		html2canvas(
 			document.querySelector(el),
@@ -221,8 +223,10 @@ function event_handler_download(e) {
 				windowWidth: document.documentElement.offsetWidth,
 				windowHeight: document.documentElement.offsetHeight,
 				onclone: function (doc) {
-						var bites = doc.body.getElementsByClassName("bite");
+						var bites = doc.body.getElementsByClassName("erased");
 						Array.prototype.forEach.call(bites, function(b){ b.style.visibility = "hidden"; })
+						var spaces = doc.body.getElementsByClassName("space");
+						Array.prototype.forEach.call(spaces, function(b){ b.style.visibility = "hidden"; })
 				}
 			}
 		).then(function(canvas) {
@@ -239,3 +243,12 @@ function event_handler_download(e) {
 }
 if(!html2canvas) { download.parentNode.removeChild(download) }
 else { download.addEventListener('click', event_handler_download);}
+
+function toggleColophon () {
+	var cc = document.querySelector("#colophon-content");
+	if(cc.classList.contains("erased")){
+		poem.fadeIn(cc);
+	} else {
+		poem.fadeOut(cc);
+	}
+}

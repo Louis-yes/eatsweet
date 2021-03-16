@@ -14,17 +14,19 @@
   font-family: "EB Garamond", serif;
 }
 .eatsweet .intro {
+  height: 160px;
   padding: 2em;
-  font-size: 18pt;
+  font-size: 20pt;
   text-align: center;
   letter-spacing: 0.5px;
 }
 .eatsweet .intro .change-text {
+  font-size: 16pt;
   cursor: pointer;
   color: #63281B;
 }
 .eatsweet .intro .change-text:hover {
-  color: #13c0f0;
+  color: #f0c013;
 }
 .eatsweet .tools-sharing {
   padding: 4em;
@@ -44,6 +46,11 @@
   background-size: 440px 620px;
   background-color: #eee;
 }
+@media screen and (max-width: 920px) {
+  .eatsweet .tools-output {
+    display: none;
+  }
+}
 .eatsweet .tools-input {
   margin-right: 10px;
 }
@@ -57,11 +64,13 @@
   padding: 2em 2.3em;
   color: #444;
   line-height: 1.5;
-  font-size: 1.3em;
+  font-size: 1.22em;
   letter-spacing: 0.4px;
   text-align: left;
-  .erase-able-display: inline-block;
-  .erase-able-white-space: break-spaces;
+}
+.eatsweet .input .erase-able, .eatsweet .input .space, .eatsweet .output .erase-able, .eatsweet .output .space {
+  display: inline-block;
+  white-space: break-spaces;
 }
 .eatsweet .input .erase-able:focus, .eatsweet .input .erase-able:active, .eatsweet .output .erase-able:focus, .eatsweet .output .erase-able:active {
   outline: none;
@@ -69,9 +78,9 @@
 .eatsweet .input {
   text-align: justify;
   text-justify: inter-word;
-  cursor: url("worm.svg"), auto;
 }
 .eatsweet .input .erase-able {
+  cursor: pointer;
   transition: color 0.3s, opacity 0.3s;
   display: inline-block;
   position: relative;
@@ -88,13 +97,13 @@
 }
 .eatsweet .space {
   display: inline;
-  padding: 0 4px;
+  padding: 0 2px;
 }
 .eatsweet .space:before {
   color: inherit;
   content: "";
   font-family: "Space";
-  font-size: 6px;
+  font-size: 4px;
 }
 .eatsweet .add-space {
   position: absolute;
@@ -105,13 +114,13 @@
   color: #444;
 }
 .eatsweet .add-space .space {
-  cursor: url("worm.svg"), auto;
+  cursor: pointer;
 }
 .eatsweet .add-space .space:focus, .eatsweet .add-space .space:active {
   outline: none;
 }
 .eatsweet .add-space .space:hover, .eatsweet .add-space .space:focus {
-  color: #13c0f0;
+  color: #f0c013;
 }
 .eatsweet .space {
   transition: opacity 0.3s, color 0.3s;
@@ -153,13 +162,16 @@
   color: #63281B;
 }
 .eatsweet .download-instructions .download:hover {
-  color: #13c0f0;
+  color: #f0c013;
 }
 .eatsweet footer {
+  height: 144px;
   padding: 20px;
-  font-style: italic;
-  font-size: 16pt;
+  font-size: 12pt;
   text-align: center;
+}
+.eatsweet footer #colophon-content {
+  transition: color 0.3s, opacity 0.3s;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,5 +1,5 @@
 $primary: #63281B;
-$hover: #13c0f0;
+$hover: #f0c013;
 $body: #444;
 
 $w : 440px;
@@ -22,11 +22,13 @@ $h : 620px;
   font-family: 'EB Garamond', serif;
 
   .intro {
+    height: 160px;
     padding: 2em;
-    font-size: 18pt;
+    font-size: 20pt;
     text-align: center;
     letter-spacing: .5px;
     .change-text {
+      font-size: 16pt;
       cursor: pointer;
       color: $primary;
       &:hover {
@@ -57,6 +59,12 @@ $h : 620px;
     background-color: #eee;
   }
 
+  @media screen and (max-width: 920px) {
+    .tools-output {
+      display: none;
+    }
+  }
+
   .tools-input {
     margin-right: 10px;
   }
@@ -73,11 +81,11 @@ $h : 620px;
 
     color: $body;
     line-height: 1.5;
-    font-size: 1.3em;
+    font-size: 1.22em;
     letter-spacing: .4px;
     text-align: left;
 
-    .erase-able: {
+    .erase-able, .space {
       display: inline-block;
       white-space: break-spaces;
     }
@@ -89,18 +97,18 @@ $h : 620px;
   .input {
     text-align: justify;
     text-justify: inter-word;
-    cursor: url("worm.svg"), auto;
     .erase-able {
+      cursor: pointer;
       transition: color .3s, opacity .3s;
       display: inline-block;
       position: relative;
       &:focus, &:active {
         outline: none;
-        color: #f0c013;
+        color: $hover;
       }
     }
     .erase-able:not(.active){
-      &:hover { color: #f0c013; }
+      &:hover { color: $hover; }
     }
   }
   .output {
@@ -109,12 +117,12 @@ $h : 620px;
 
   .space {
     display: inline;
-    padding:0 4px;
+    padding:0 2px;
     &:before {
       color: inherit;
       content: '\e900';
       font-family: "Space";
-      font-size: 6px;
+      font-size: 4px;
     }
   }
 
@@ -128,7 +136,7 @@ $h : 620px;
     color: $body;
 
     .space {
-      cursor: url("worm.svg"), auto;
+      cursor: pointer;
       &:focus, &:active { outline: none; }
       &:hover, &:focus { color: $hover }
     }
@@ -183,9 +191,13 @@ $h : 620px;
   }
 
   footer {
+    height: 144px;
     padding: 20px;
-    font-style: italic;
-    font-size: 16pt;
+    font-size: 12pt;
     text-align: center;
+
+    #colophon-content {
+      transition: color .3s, opacity .3s;
+    }
   }
 }
